@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:24.04
 MAINTAINER Tim Zaman <timbobel@gmail.com>
 
 # Make sure to install steam and Dota first, as those docker layers will be biggest.
@@ -9,7 +9,7 @@ MAINTAINER Tim Zaman <timbobel@gmail.com>
 RUN apt-get -q update \
  && apt-get install -y \
     lib32stdc++6 \
-    lib32gcc1 \
+    lib32gcc-s1 \
     curl && \
     apt-get -y upgrade && \
     apt-get clean autoclean && \
@@ -28,6 +28,13 @@ RUN mkdir -p /root/steamcmd \
 ARG user
 ARG pwd
 ARG guard
+
+RUN ls /root/steamcmd
+
 RUN /root/steamcmd/steamcmd.sh +login ${user} ${pwd} ${guard} +app_update 570 +quit
 
-RUN ln -s ~/steamcmd/linux64 ~/.steam/sdk64
+RUN mkdir ~/.steam
+
+RUN ls /root/steamcmd
+
+RUN ln -s /root/steamcmd/linux32 ~/.steam/sdk64
