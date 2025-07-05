@@ -14,4 +14,6 @@ COPY setup.py README.md /root/dotaservice/
 COPY dotaservice /root/dotaservice/dotaservice/
 RUN pip3.12 install --user -e /root/dotaservice/ --break-system-packages
 
+ENV PYTHONPATH /root/dotaservice/
+
 ENTRYPOINT ["python3.12", "-m", "dotaservice"]

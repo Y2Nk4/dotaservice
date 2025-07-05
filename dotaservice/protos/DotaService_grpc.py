@@ -2,9 +2,12 @@
 # source: dotaservice/protos/DotaService.proto
 # plugin: grpclib.plugin.main
 import abc
+import typing
 
 import grpclib.const
 import grpclib.client
+if typing.TYPE_CHECKING:
+    import grpclib.server
 
 import dotaservice.protos.dota_gcmessages_common_bot_script_pb2
 import dotaservice.protos.dota_shared_enums_pb2
@@ -14,18 +17,18 @@ import dotaservice.protos.DotaService_pb2
 class DotaServiceBase(abc.ABC):
 
     @abc.abstractmethod
-    async def reset(self, stream):
+    async def reset(self, stream: 'grpclib.server.Stream[dotaservice.protos.DotaService_pb2.GameConfig, dotaservice.protos.DotaService_pb2.InitialObservation]') -> None:
         pass
 
     @abc.abstractmethod
-    async def observe(self, stream):
+    async def observe(self, stream: 'grpclib.server.Stream[dotaservice.protos.DotaService_pb2.ObserveConfig, dotaservice.protos.DotaService_pb2.Observation]') -> None:
         pass
 
     @abc.abstractmethod
-    async def act(self, stream):
+    async def act(self, stream: 'grpclib.server.Stream[dotaservice.protos.DotaService_pb2.Actions, dotaservice.protos.DotaService_pb2.Empty]') -> None:
         pass
 
-    def __mapping__(self):
+    def __mapping__(self) -> typing.Dict[str, grpclib.const.Handler]:
         return {
             '/DotaService/reset': grpclib.const.Handler(
                 self.reset,
